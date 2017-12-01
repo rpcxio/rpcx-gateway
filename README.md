@@ -1,6 +1,8 @@
 # rpcx-gateway
 [rpcx-gateway](https://github.com/rpcx-ecosystem/rpcx-gateway) is a http gateway for [rpcx](https://github.com/smallnest/rpcx) services.
 
+[rpcx](https://github.com/smallnest/rpcx) is a fast rpc framework. Faster, more features.
+
 You can write rpc http clients in any programming languages such as Java、Python、C#、Node.js、Php、C\C++、Rust and others. See [examples](https://github.com/rpcx-ecosystem/rpcx-gateway/blob/master/examples/examples.md)
 
 ## Deployment models
