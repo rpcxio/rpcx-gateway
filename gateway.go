@@ -2,7 +2,6 @@ package gateway
 
 import (
 	"context"
-	"fmt"
 	"log"
 	"net/http"
 	"strings"
@@ -83,7 +82,6 @@ func (g *Gateway) handleRequest(w http.ResponseWriter, r *http.Request, params h
 	xc = g.xclients[servicePath]
 	g.mu.Unlock()
 
-	fmt.Println("@@@@@: %+v\n", req)
 	m, payload, err := xc.SendRaw(context.Background(), req)
 	for k, v := range m {
 		wh.Set(k, v)
