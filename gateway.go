@@ -3,17 +3,29 @@ package gateway
 import (
 	"context"
 	"log"
+	"net"
 	"net/http"
 	"strings"
 	"sync"
+	"time"
 
 	"github.com/julienschmidt/httprouter"
 	"github.com/smallnest/rpcx/client"
+	"golang.org/x/net/http2"
+)
+
+type ServerType string
+
+const (
+	HTTP1  ServerType = "http1"
+	HTTP2             = "http2"
+	HTTP2c            = "h2c"
 )
 
 type Gateway struct {
 	// http listen address
-	Addr string
+	Addr       string
+	ServerType ServerType
 
 	serviceDiscovery client.ServiceDiscovery
 	FailMode         client.FailMode
@@ -24,10 +36,11 @@ type Gateway struct {
 	xclients map[string]client.XClient
 }
 
-func NewGateway(addr string, sd client.ServiceDiscovery, failMode client.FailMode, selectMode client.SelectMode, option client.Option) *Gateway {
+func NewGateway(addr string, st ServerType, sd client.ServiceDiscovery, failMode client.FailMode, selectMode client.SelectMode, option client.Option) *Gateway {
 
 	return &Gateway{
 		Addr:             addr,
+		ServerType:       st,
 		serviceDiscovery: sd,
 		FailMode:         failMode,
 		SelectMode:       selectMode,
@@ -42,8 +55,44 @@ func (g *Gateway) Serve() {
 	router.GET("/*servicePath", g.handleRequest)
 	router.PUT("/*servicePath", g.handleRequest)
 
-	if err := http.ListenAndServe(g.Addr, router); err != nil {
+	switch g.ServerType {
+	case HTTP2c:
+		g.startH2c(router)
+	case HTTP2:
+		panic("unsupported")
+	default:
+		g.startHttp1(router)
+	}
+}
+
+func (g *Gateway) startHttp1(handler http.Handler) {
+	if err := http.ListenAndServe(g.Addr, handler); err != nil {
 		log.Fatalf("error in ListenAndServe: %s", err)
+	}
+}
+
+func (g *Gateway) startH2c(handler http.Handler) {
+	server := &http.Server{
+		Addr:         g.Addr,
+		Handler:      handler,
+		ReadTimeout:  10 * time.Second,
+		WriteTimeout: 10 * time.Second,
+	}
+	//http2.Server.ServeConn()
+	s2 := &http2.Server{
+		IdleTimeout: 1 * time.Minute,
+	}
+	http2.ConfigureServer(server, s2)
+	l, _ := net.Listen("tcp", g.Addr)
+	defer l.Close()
+	log.Println("Start server...")
+	for {
+		rwc, err := l.Accept()
+		if err != nil {
+			log.Println("accept err:", err)
+			continue
+		}
+		go s2.ServeConn(rwc, &http2.ServeConnOpts{BaseConfig: server})
 	}
 }
 

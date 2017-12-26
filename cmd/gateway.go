@@ -14,6 +14,7 @@ import (
 
 var (
 	addr       = flag.String("addr", ":9981", "http server address")
+	st         = flag.String("st", "http1", "server type: http1 or h2c")
 	registry   = flag.String("registry", "peer2peer://127.0.0.1:8972", "registry address")
 	basePath   = flag.String("basepath", "/rpcx", "basepath for zookeeper, etcd and consul")
 	failmode   = flag.Int("failmode", int(client.Failover), "failMode, Failover in default")
@@ -27,7 +28,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	gw := gateway.NewGateway(*addr, d, client.FailMode(*failmode), client.SelectMode(*selectMode), client.DefaultOption)
+	gw := gateway.NewGateway(*addr, gateway.ServerType(*st), d, client.FailMode(*failmode), client.SelectMode(*selectMode), client.DefaultOption)
 
 	gw.Serve()
 }
