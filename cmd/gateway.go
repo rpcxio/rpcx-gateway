@@ -53,13 +53,13 @@ func createServiceDiscovery(regAddr string) (client.ServiceDiscovery, error) {
 		}
 		return client.NewMultipleServersDiscovery(pairs), nil
 	case "zookeeper":
-		return client.NewZookeeperDiscovery(*basePath, "placeholder", []string{regAddr}, nil), nil
+		return client.NewZookeeperDiscoveryTemplate(*basePath, []string{regAddr}, nil), nil
 	case "etcd":
-		return client.NewEtcdDiscovery(*basePath, "placeholder", []string{regAddr}, nil), nil
+		return client.NewEtcdDiscoveryTemplate(*basePath, []string{regAddr}, nil), nil
 	case "consul":
-		return client.NewConsulDiscovery(*basePath, "placeholder", []string{regAddr}, nil), nil
+		return client.NewConsulDiscoveryTemplate(*basePath, []string{regAddr}, nil), nil
 	case "mdns":
-		client.NewMDNSDiscovery("placeholder", 10*time.Second, 10*time.Second, "")
+		client.NewMDNSDiscoveryTemplate(10*time.Second, 10*time.Second, "")
 	default:
 		return nil, fmt.Errorf("wrong registry type %s. only support peer2peer,multiple, zookeeper, etcd, consul and mdns", regType)
 	}
