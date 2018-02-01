@@ -2,6 +2,7 @@ package gateway
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"net"
 	"net/http"
@@ -125,11 +126,14 @@ func (g *Gateway) handleRequest(w http.ResponseWriter, r *http.Request, params h
 
 	var xc client.XClient
 	g.mu.Lock()
-	if g.xclients[servicePath] == nil {
-		g.xclients[servicePath] = client.NewXClient(servicePath, g.FailMode, g.SelectMode, g.serviceDiscovery.Clone(servicePath), g.Option)
-	}
-	xc = g.xclients[servicePath]
+	xc, err = getXClient(g, servicePath)
 	g.mu.Unlock()
+
+	if err != nil {
+		wh.Set(XMessageStatusType, "Error")
+		wh.Set(XErrorMessage, err.Error())
+		return
+	}
 
 	m, payload, err := xc.SendRaw(context.Background(), req)
 	for k, v := range m {
@@ -143,4 +147,24 @@ func (g *Gateway) handleRequest(w http.ResponseWriter, r *http.Request, params h
 
 	w.Write(payload)
 
+}
+
+func getXClient(g *Gateway, servicePath string) (xc client.XClient, err error) {
+	defer func() {
+		if e := recover(); e != nil {
+			if ee, ok := e.(error); ok {
+				err = ee
+				return
+			}
+
+			err = fmt.Errorf("failed to get xclient: %v", e)
+		}
+	}()
+
+	if g.xclients[servicePath] == nil {
+		g.xclients[servicePath] = client.NewXClient(servicePath, g.FailMode, g.SelectMode, g.serviceDiscovery.Clone(servicePath), g.Option)
+	}
+	xc = g.xclients[servicePath]
+
+	return xc, err
 }
