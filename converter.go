@@ -1,6 +1,7 @@
 package gateway
 
 import (
+	"errors"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -58,6 +59,8 @@ func HttpRequest2RpcxRequest(r *http.Request) (*protocol.Message, error) {
 			return nil, err
 		}
 		req.SetSerializeType(protocol.SerializeType(rst))
+	} else {
+		return nil, errors.New("empty serialized type")
 	}
 
 	meta := h.Get(XMeta)
@@ -78,11 +81,15 @@ func HttpRequest2RpcxRequest(r *http.Request) (*protocol.Message, error) {
 	sp := h.Get(XServicePath)
 	if sp != "" {
 		req.ServicePath = sp
+	} else {
+		return nil, errors.New("empty servicepath")
 	}
 
 	sm := h.Get(XServiceMethod)
 	if sm != "" {
 		req.ServiceMethod = sm
+	} else {
+		return nil, errors.New("empty servicemethod")
 	}
 
 	payload, err := ioutil.ReadAll(r.Body)
