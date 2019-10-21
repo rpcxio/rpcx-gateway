@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"strings"
 	"sync"
+	"sync/atomic"
 	"time"
 
 	"github.com/julienschmidt/httprouter"
@@ -35,6 +36,8 @@ type Gateway struct {
 
 	mu       sync.RWMutex
 	xclients map[string]client.XClient
+
+	seq uint64
 }
 
 func NewGateway(addr string, st ServerType, sd client.ServiceDiscovery, failMode client.FailMode, selectMode client.SelectMode, option client.Option) *Gateway {
@@ -109,8 +112,13 @@ func (g *Gateway) handleRequest(w http.ResponseWriter, r *http.Request, params h
 
 	servicePath := r.Header.Get(XServicePath)
 
+	messageID := r.Header.Get(XMessageID)
+
 	wh := w.Header()
 	req, err := HttpRequest2RpcxRequest(r)
+	seq := atomic.AddUint64(&g.seq, 1)
+	req.SetSeq(seq)
+
 	if err != nil {
 		rh := r.Header
 		for k, v := range rh {
@@ -138,6 +146,9 @@ func (g *Gateway) handleRequest(w http.ResponseWriter, r *http.Request, params h
 	m, payload, err := xc.SendRaw(context.Background(), req)
 	for k, v := range m {
 		wh.Set(k, v)
+	}
+	if messageID != "" {
+		wh.Set(XMessageID, messageID)
 	}
 	if err != nil {
 		wh.Set(XMessageStatusType, "Error")
