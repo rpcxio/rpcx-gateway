@@ -56,8 +56,12 @@ func createServiceDiscovery(regAddr string) (client.ServiceDiscovery, error) {
 		return client.NewZookeeperDiscoveryTemplate(*basePath, []string{regAddr}, nil), nil
 	case "etcd":
 		return client.NewEtcdDiscoveryTemplate(*basePath, []string{regAddr}, nil), nil
+	case "etcdv3":
+		return client.NewEtcdV3DiscoveryTemplate(*basePath, []string{regAddr}, nil), nil
 	case "consul":
 		return client.NewConsulDiscoveryTemplate(*basePath, []string{regAddr}, nil), nil
+	case "redis":
+		return client.NewRedisDiscoveryTemplate(*basePath, []string{regAddr}, nil), nil
 	case "mdns":
 		return client.NewMDNSDiscoveryTemplate(10*time.Second, 10*time.Second, ""), nil
 	default:
