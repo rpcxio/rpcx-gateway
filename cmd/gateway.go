@@ -59,7 +59,7 @@ func createServiceDiscovery(regAddr string) (client.ServiceDiscovery, error) {
 	case "consul":
 		return client.NewConsulDiscoveryTemplate(*basePath, []string{regAddr}, nil), nil
 	case "mdns":
-		client.NewMDNSDiscoveryTemplate(10*time.Second, 10*time.Second, "")
+		return client.NewMDNSDiscoveryTemplate(10*time.Second, 10*time.Second, ""), nil
 	default:
 		return nil, fmt.Errorf("wrong registry type %s. only support peer2peer,multiple, zookeeper, etcd, consul and mdns", regType)
 	}
