@@ -63,6 +63,4 @@ func createServiceDiscovery(regAddr string) (client.ServiceDiscovery, error) {
 	default:
 		return nil, fmt.Errorf("wrong registry type %s. only support peer2peer,multiple, zookeeper, etcd, consul and mdns", regType)
 	}
-
-	return nil, errors.New("wrong registry type. only support peer2peer,multiple, zookeeper, etcd, consul and mdns")
 }
