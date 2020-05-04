@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"sync"
 
-	gateway "github.com/rpcx-ecosystem/rpcx-gateway"
+	gateway "github.com/rpcxio/rpcx-gateway"
 
 	"github.com/smallnest/rpcx/codec"
 )
