@@ -3,7 +3,7 @@ var request = require('request');
 
   
   request({
-    url: "http://vps.colobu.com:9981/",
+    url: "http://vps.colobu.com:9981/Arith",
     method: "POST",
     headers: {
         'Content-Type': 'application/rpcx',

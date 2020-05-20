@@ -1,5 +1,5 @@
 <?php
-$url = 'http://vps.colobu.com:9981/';
+$url = 'http://vps.colobu.com:9981/Arith';
 $data = '{"A":10, "B":20}';
 
 // use key 'http' even if you send the request to https://...
