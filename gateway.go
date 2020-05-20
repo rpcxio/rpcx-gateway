@@ -24,6 +24,7 @@ const (
 	HTTP2c            = "h2c"
 )
 
+var HttpCode int        // HTTP状态码
 type Gateway struct {
 	// http listen address
 	Addr       string
@@ -55,6 +56,7 @@ func NewGateway(addr string, st ServerType, sd client.ServiceDiscovery, failMode
 
 func (g *Gateway) Serve() {
 	router := httprouter.New()
+	router.NotFound = http.HandlerFunc(XNotFound)
 	router.POST("/*servicePath", g.handleRequest)
 	router.GET("/*servicePath", g.handleRequest)
 	router.PUT("/*servicePath", g.handleRequest)
@@ -65,7 +67,8 @@ func (g *Gateway) Serve() {
 	case HTTP2:
 		panic("unsupported")
 	default:
-		g.startHttp1(router)
+		//g.startHttp1(router)
+		g.startHttp1(Logger(router))
 	}
 }
 
