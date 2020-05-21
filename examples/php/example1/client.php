@@ -6,8 +6,8 @@ $data = '{"A":10, "B":20}';
 $options = array(
     'http' => array(
         'header'  => "Content-type: application/rpcx\r\n" .
-        "X-RPCX-MessageID: 12345678\r\n" .
-        "X-RPCX-MesssageType: 0\r\n" .
+        // "X-RPCX-MessageID: 12345678\r\n" .
+        // "X-RPCX-MesssageType: 0\r\n" .
         "X-RPCX-SerializeType: 1\r\n" .
         "X-RPCX-ServicePath: Arith\r\n" .
         "X-RPCX-ServiceMethod: Mul\r\n",

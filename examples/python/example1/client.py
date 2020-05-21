@@ -13,8 +13,8 @@ payload = {
 headers = {
     "Host": "vps.colobu.com",
     "Connection": "keep-alive",
-    "X-RPCX-MessageID": "12345678",
-    "X-RPCX-MesssageType": "0",
+    # "X-RPCX-MessageID": "12345678",
+    # "X-RPCX-MesssageType": "0",
     "X-RPCX-SerializeType": "1",
     "X-RPCX-ServicePath": "Arith",
     "X-RPCX-ServiceMethod": "Mul",

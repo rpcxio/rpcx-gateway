@@ -49,7 +49,7 @@ func main() {
 
 				h := req.Header
 				// h.Set(gateway.XMessageID, strconv.Itoa(rand.Int()))
-				h.Set(gateway.XMessageType, "0")
+				// h.Set(gateway.XMessageType, "0")
 				h.Set(gateway.XSerializeType, "3")
 				h.Set(gateway.XServicePath, "Arith")
 				h.Set(gateway.XServiceMethod, "Mul")

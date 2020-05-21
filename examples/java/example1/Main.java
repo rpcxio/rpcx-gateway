@@ -20,8 +20,8 @@ public class Main {
         conn.setRequestProperty("charset", "utf-8");
         conn.setRequestProperty("Content-Length", Integer.toString(requestedPayload.length));
 
-        conn.setRequestProperty("X-RPCX-MessageID", "12345678");
-        conn.setRequestProperty("X-RPCX-MesssageType", "0");
+        // conn.setRequestProperty("X-RPCX-MessageID", "12345678");
+        // conn.setRequestProperty("X-RPCX-MesssageType", "0");
         conn.setRequestProperty("X-RPCX-SerializeType", "1");
         conn.setRequestProperty("X-RPCX-ServicePath", "Arith");
         conn.setRequestProperty("X-RPCX-ServiceMethod", "Mul");
