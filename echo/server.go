@@ -30,16 +30,16 @@ func NewWithEcho(addr string, e *echo.Echo) *Server {
 
 // RegisterHandler configures the handler to handle http rpcx invoke.
 // It wraps ServiceHandler into httprouter.Handle.
-func (s *Server) RegisterHandler(handler ServiceHandler) {
+func (s *Server) RegisterHandler(base string, handler ServiceHandler) {
 	e := s.e
 	if e == nil {
 		e = echo.New()
 	}
 	h := wrapServiceHandler(handler)
 
-	e.POST("/:servicePath", h)
-	e.GET("/:servicePath", h)
-	e.PUT("/:servicePath", h)
+	e.POST(base+":servicePath", h)
+	e.GET(base+":servicePath", h)
+	e.PUT(base+":servicePath", h)
 	s.e = e
 }
 

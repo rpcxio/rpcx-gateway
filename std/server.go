@@ -32,7 +32,7 @@ func NewWithRouter(addr string, router *httprouter.Router) *Server {
 
 // RegisterHandler configures the handler to handle http rpcx invoke.
 // It wraps ServiceHandler into httprouter.Handle.
-func (s *Server) RegisterHandler(handler ServiceHandler) {
+func (s *Server) RegisterHandler(base string, handler ServiceHandler) {
 	router := s.router
 	if router == nil {
 		router = httprouter.New()
@@ -42,9 +42,9 @@ func (s *Server) RegisterHandler(handler ServiceHandler) {
 		h = s.Middleware(h)
 	}
 
-	router.POST("/*servicePath", h)
-	router.GET("/*servicePath", h)
-	router.PUT("/*servicePath", h)
+	router.POST(base+"*servicePath", h)
+	router.GET(base+"*servicePath", h)
+	router.PUT(base+"*servicePath", h)
 	s.router = router
 }
 

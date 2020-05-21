@@ -30,7 +30,7 @@ func main() {
 	}
 
 	httpServer := std.New(*addr)
-	gw := gateway.NewGateway(httpServer, d, client.FailMode(*failmode), client.SelectMode(*selectMode), client.DefaultOption)
+	gw := gateway.NewGateway("/", httpServer, d, client.FailMode(*failmode), client.SelectMode(*selectMode), client.DefaultOption)
 
 	gw.Serve()
 }

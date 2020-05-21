@@ -19,12 +19,13 @@ type ServiceHandler func(*http.Request, string) (map[string]string, []byte, erro
 // You can use echo, gin, iris or other go web frameworks to implement it.
 // You must wrap ServiceHandler into your handler of your selected web framework and add it into router.
 type HTTPServer interface {
-	RegisterHandler(handler ServiceHandler)
+	RegisterHandler(base string, handler ServiceHandler)
 	Serve() error
 }
 
 // Gateway is a rpcx gateway which can convert http invoke into rpcx invoke.
 type Gateway struct {
+	base       string
 	httpserver HTTPServer
 
 	serviceDiscovery client.ServiceDiscovery
@@ -39,8 +40,21 @@ type Gateway struct {
 }
 
 // NewGateway returns a new gateway.
-func NewGateway(hs HTTPServer, sd client.ServiceDiscovery, failMode client.FailMode, selectMode client.SelectMode, option client.Option) *Gateway {
+func NewGateway(base string, hs HTTPServer, sd client.ServiceDiscovery, failMode client.FailMode, selectMode client.SelectMode, option client.Option) *Gateway {
+	// base is empty or like /abc/
+	if base == "" {
+		base = "/"
+	}
+
+	if base[0] != '/' {
+		base = "/" + base
+	}
+	if base[len(base)-1] != '/' {
+		base = base + "/"
+	}
+
 	g := &Gateway{
+		base:             base,
 		httpserver:       hs,
 		serviceDiscovery: sd,
 		FailMode:         failMode,
@@ -49,7 +63,7 @@ func NewGateway(hs HTTPServer, sd client.ServiceDiscovery, failMode client.FailM
 		xclients:         make(map[string]client.XClient),
 	}
 
-	hs.RegisterHandler(g.handler)
+	hs.RegisterHandler(base, g.handler)
 	return g
 }
 

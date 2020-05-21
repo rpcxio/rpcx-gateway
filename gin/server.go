@@ -30,16 +30,16 @@ func NewWithGin(addr string, g *gin.Engine) *Server {
 
 // RegisterHandler configures the handler to handle http rpcx invoke.
 // It wraps ServiceHandler into httprouter.Handle.
-func (s *Server) RegisterHandler(handler ServiceHandler) {
+func (s *Server) RegisterHandler(base string, handler ServiceHandler) {
 	g := s.g
 	if g == nil {
 		g = gin.Default()
 	}
 	h := wrapServiceHandler(handler)
 
-	g.POST("/:servicePath", h)
-	g.GET("/:servicePath", h)
-	g.PUT("/:servicePath", h)
+	g.POST(base+":servicePath", h)
+	g.GET(base+":servicePath", h)
+	g.PUT(base+":servicePath", h)
 	s.g = g
 }
 
