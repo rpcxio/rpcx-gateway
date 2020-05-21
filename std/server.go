@@ -42,9 +42,9 @@ func (s *Server) RegisterHandler(base string, handler ServiceHandler) {
 		h = s.Middleware(h)
 	}
 
-	router.POST(base+"*servicePath", h)
-	router.GET(base+"*servicePath", h)
-	router.PUT(base+"*servicePath", h)
+	router.POST(base, h)
+	router.GET(base, h)
+	router.PUT(base, h)
 	s.router = router
 }
 

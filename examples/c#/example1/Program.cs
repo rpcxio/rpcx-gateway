@@ -10,7 +10,7 @@ namespace example1
         public static void Main ()  
         {  
             // write request
-            WebRequest request = WebRequest.Create ("http://127.0.0.1:9981/Arith"); 
+            WebRequest request = WebRequest.Create ("http://127.0.0.1:9981/"); 
             request.Method = "POST";  
             request.Headers.Add("X-RPCX-MessageID", "12345678");
             request.Headers.Add("X-RPCX-MesssageType", "0");

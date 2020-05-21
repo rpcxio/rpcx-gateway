@@ -11,7 +11,7 @@ public class Main {
         String arg = "{\"A\":10, \"B\":20}";
         byte[] requestedPayload = arg.getBytes("utf-8");
 
-        URL url = new URL("http://vps.colobu.com:9981/Arith");
+        URL url = new URL("http://vps.colobu.com:9981/");
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setDoOutput(true);
         conn.setInstanceFollowRedirects(false);

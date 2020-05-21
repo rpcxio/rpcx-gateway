@@ -9,7 +9,7 @@ import (
 	"time"
 
 	gateway "github.com/rpcxio/rpcx-gateway"
-	"github.com/rpcxio/rpcx-gateway/std"
+	"github.com/rpcxio/rpcx-gateway/gin"
 	"github.com/smallnest/rpcx/client"
 )
 
@@ -29,7 +29,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	httpServer := std.New(*addr)
+	httpServer := gin.New(*addr)
 	gw := gateway.NewGateway("/", httpServer, d, client.FailMode(*failmode), client.SelectMode(*selectMode), client.DefaultOption)
 
 	gw.Serve()

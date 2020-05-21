@@ -49,9 +49,6 @@ func NewGateway(base string, hs HTTPServer, sd client.ServiceDiscovery, failMode
 	if base[0] != '/' {
 		base = "/" + base
 	}
-	if base[len(base)-1] != '/' {
-		base = base + "/"
-	}
 
 	g := &Gateway{
 		base:             base,

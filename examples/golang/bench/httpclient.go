@@ -56,7 +56,7 @@ func main() {
 				},
 				Timeout: time.Duration(1) * time.Second,
 			}
-			req, err := http.NewRequest("POST", "http://127.0.0.1:9981/Arith", bytes.NewReader(data))
+			req, err := http.NewRequest("POST", "http://127.0.0.1:9981/", bytes.NewReader(data))
 			if err != nil {
 				log.Fatal("failed to create request: ", err)
 				return

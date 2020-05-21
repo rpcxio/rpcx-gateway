@@ -37,9 +37,9 @@ func (s *Server) RegisterHandler(base string, handler ServiceHandler) {
 	}
 	h := wrapServiceHandler(handler)
 
-	e.POST(base+":servicePath", h)
-	e.GET(base+":servicePath", h)
-	e.PUT(base+":servicePath", h)
+	e.POST(base, h)
+	e.GET(base, h)
+	e.PUT(base, h)
 	s.e = e
 }
 

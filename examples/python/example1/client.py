@@ -4,7 +4,7 @@ import json
 import requests
 
 
-url = 'http://vps.colobu.com:9981/Arith'
+url = 'http://vps.colobu.com:9981/'
 payload = {
     'A': 10,
     'B': 20
