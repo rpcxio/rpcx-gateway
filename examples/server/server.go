@@ -5,7 +5,6 @@ import (
 	"flag"
 	"fmt"
 
-	example "github.com/rpcxio/rpcx-examples"
 	"github.com/smallnest/rpcx/server"
 )
 
@@ -13,10 +12,19 @@ var (
 	addr = flag.String("addr", "localhost:8972", "server address")
 )
 
+type Args struct {
+	A int
+	B int
+}
+
+type Reply struct {
+	C int
+}
+
 type Arith struct{}
 
 // the second parameter is not a pointer
-func (t *Arith) Mul(ctx context.Context, args example.Args, reply *example.Reply) error {
+func (t *Arith) Mul(ctx context.Context, args Args, reply *Reply) error {
 	reply.C = args.A * args.B
 	fmt.Println("C=", reply.C)
 	return nil

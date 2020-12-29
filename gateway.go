@@ -104,7 +104,11 @@ func getXClient(g *Gateway, servicePath string) (xc client.XClient, err error) {
 	}()
 
 	if g.xclients[servicePath] == nil {
-		g.xclients[servicePath] = client.NewXClient(servicePath, g.FailMode, g.SelectMode, g.serviceDiscovery.Clone(servicePath), g.Option)
+		d, err := g.serviceDiscovery.Clone(servicePath)
+		if err != nil {
+			return nil, err
+		}
+		g.xclients[servicePath] = client.NewXClient(servicePath, g.FailMode, g.SelectMode, d, g.Option)
 	}
 	xc = g.xclients[servicePath]
 

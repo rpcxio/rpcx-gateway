@@ -8,6 +8,7 @@ import (
 	"strings"
 	"time"
 
+	etcdclient "github.com/rpcxio/rpcx-etcd/client"
 	gateway "github.com/rpcxio/rpcx-gateway"
 	"github.com/rpcxio/rpcx-gateway/gin"
 	"github.com/smallnest/rpcx/client"
@@ -46,26 +47,26 @@ func createServiceDiscovery(regAddr string) (client.ServiceDiscovery, error) {
 
 	switch regType {
 	case "peer2peer": //peer2peer://127.0.0.1:8972
-		return client.NewPeer2PeerDiscovery("tcp@"+regAddr, ""), nil
+		return client.NewPeer2PeerDiscovery("tcp@"+regAddr, "")
 	case "multiple":
 		var pairs []*client.KVPair
 		pp := strings.Split(regAddr, ",")
 		for _, v := range pp {
 			pairs = append(pairs, &client.KVPair{Key: v})
 		}
-		return client.NewMultipleServersDiscovery(pairs), nil
+		return client.NewMultipleServersDiscovery(pairs)
 	case "zookeeper":
-		return client.NewZookeeperDiscoveryTemplate(*basePath, []string{regAddr}, nil), nil
+		return client.NewZookeeperDiscoveryTemplate(*basePath, []string{regAddr}, nil)
 	case "etcd":
-		return client.NewEtcdDiscoveryTemplate(*basePath, []string{regAddr}, nil), nil
+		return etcdclient.NewEtcdDiscoveryTemplate(*basePath, []string{regAddr}, nil)
 	case "etcdv3":
-		return client.NewEtcdV3DiscoveryTemplate(*basePath, []string{regAddr}, nil), nil
+		return etcdclient.NewEtcdV3DiscoveryTemplate(*basePath, []string{regAddr}, nil)
 	case "consul":
-		return client.NewConsulDiscoveryTemplate(*basePath, []string{regAddr}, nil), nil
+		return client.NewConsulDiscoveryTemplate(*basePath, []string{regAddr}, nil)
 	case "redis":
-		return client.NewRedisDiscoveryTemplate(*basePath, []string{regAddr}, nil), nil
+		return client.NewRedisDiscoveryTemplate(*basePath, []string{regAddr}, nil)
 	case "mdns":
-		return client.NewMDNSDiscoveryTemplate(10*time.Second, 10*time.Second, ""), nil
+		return client.NewMDNSDiscoveryTemplate(10*time.Second, 10*time.Second, "")
 	default:
 		return nil, fmt.Errorf("wrong registry type %s. only support peer2peer,multiple, zookeeper, etcd, consul and mdns", regType)
 	}
