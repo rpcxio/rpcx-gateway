@@ -7,7 +7,7 @@ require (
 	github.com/julienschmidt/httprouter v1.3.0
 	github.com/labstack/echo v3.3.10+incompatible
 	github.com/labstack/gommon v0.3.0 // indirect
-	github.com/rpcxio/rpcx-etcd v0.0.0-20201229103411-8317fc934fbb
+	github.com/rpcxio/rpcx-etcd 
 	github.com/smallnest/rpcx v0.0.0-20201229103109-20b35e5375d1
 )
 
