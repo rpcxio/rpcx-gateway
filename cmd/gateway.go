@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"log"
 	"strings"
-	"time"
 
 	etcdclient "github.com/rpcxio/rpcx-etcd/client"
 	gateway "github.com/rpcxio/rpcx-gateway"
@@ -46,7 +45,7 @@ func createServiceDiscovery(regAddr string) (client.ServiceDiscovery, error) {
 	regAddr = regAddr[i+3:]
 
 	switch regType {
-	case "peer2peer": //peer2peer://127.0.0.1:8972
+	case "peer2peer": // peer2peer://127.0.0.1:8972
 		return client.NewPeer2PeerDiscovery("tcp@"+regAddr, "")
 	case "multiple":
 		var pairs []*client.KVPair
@@ -65,8 +64,6 @@ func createServiceDiscovery(regAddr string) (client.ServiceDiscovery, error) {
 		return client.NewConsulDiscoveryTemplate(*basePath, []string{regAddr}, nil)
 	case "redis":
 		return client.NewRedisDiscoveryTemplate(*basePath, []string{regAddr}, nil)
-	case "mdns":
-		return client.NewMDNSDiscoveryTemplate(10*time.Second, 10*time.Second, "")
 	default:
 		return nil, fmt.Errorf("wrong registry type %s. only support peer2peer,multiple, zookeeper, etcd, consul and mdns", regType)
 	}
