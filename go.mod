@@ -3,7 +3,7 @@ module github.com/rpcxio/rpcx-gateway
 go 1.15
 
 require (
-	github.com/gin-gonic/gin v1.6.3
+	github.com/gin-gonic/gin v1.7.7
 	github.com/google/btree v1.0.0 // indirect
 	github.com/julienschmidt/httprouter v1.3.0
 	github.com/labstack/echo v3.3.10+incompatible
